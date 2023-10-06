@@ -281,3 +281,34 @@ void BetterInventoryExport::export_json(std::filesystem::path filename, std::vec
 }
 #undef EXP_VAL
 #undef EXP_STRING
+void BetterInventoryExport::registerHooks()
+{
+	std::vector<std::string> params2;
+	params2.push_back("invent_dump_better"); // The function name
+	params2.push_back("json"); // The desired output format ("csv" or "json")
+
+	gameWrapper->HookEventWithCallerPost<TradeWrapper>(HOOK_TRADE_END,
+		[&params2, this](TradeWrapper caller, void* params, std::string eventName) {
+			OnInventDump(params2); 
+		});
+
+	gameWrapper->HookEventWithCallerPost<ActorWrapper>(HOOK_NEW_ITEM,
+		[&params2, this](ActorWrapper caller, void* params, std::string eventName) {
+			OnInventDump(params2);
+		});
+
+	gameWrapper->HookEventWithCallerPost<ActorWrapper>(HOOK_SHOW_NEW_ITEM,
+		[&params2, this](ActorWrapper caller, void* params, std::string eventName) {
+			OnInventDump(params2);
+		});
+
+	gameWrapper->HookEventWithCallerPost<ActorWrapper>(HOOK_DROPS_ENDED,
+		[&params2, this](ActorWrapper caller, void* params, std::string eventName) {
+			OnInventDump(params2);
+		});
+
+	gameWrapper->HookEventWithCallerPost<ProductTradeInWrapper>(HOOK_TRADE_IN_END,
+		[&params2, this](ProductTradeInWrapper caller, void* params, std::string eventName) {
+			OnInventDump(params2);
+		});
+}

@@ -4,6 +4,18 @@
 #include <filesystem>
 
 constexpr auto plugin_version = "1.0";
+/* TRADE HOOKS */
+#define HOOK_TRADE_END "Function TAGame.GFxData_TradeLobby_TA.CancelTrading"
+
+/* ITEM DROP HOOKS */
+#define HOOK_NEW_ITEM "Function TAGame.GFxData_MultiItemDrops_TA.HandleNewOnlineItem" // When an item drops to us.
+#define HOOK_DROPS_ENDED "Function TAGame.GFxData_MultiItemDrops_TA.PlayerAllDropsHandled" // Item drops have ended -> clean-up
+
+/* TRADE-IN HOOKS */
+#define HOOK_TRADE_IN_END "Function TAGame.GFxData_ProductTradeIn_TA.ClearTradeIns"
+
+/* CAPSULE OPENING */
+#define HOOK_SHOW_NEW_ITEM "Function TAGame.PremiumGaragePreviewSet_TA.OnRevealFinished" // When user sees what item he got
 
 enum class ProductQuality : uint8_t
 {
@@ -96,7 +108,8 @@ public:
 	ProductStruct GetProductInfo(ProductWrapper& pw);
 
 	ProductStruct GetOnlineProductInfo(OnlineProductWrapper& pw);
-
+	
+	void registerHooks();
 
 	void export_csv(std::filesystem::path filename, std::vector<ProductStruct>& psv);
 	void export_json(std::filesystem::path filename, std::vector<ProductStruct>& psv);
